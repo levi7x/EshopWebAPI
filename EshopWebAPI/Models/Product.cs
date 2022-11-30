@@ -11,6 +11,8 @@ namespace EshopWebAPI.Models
         public double Price { get; set; }
         public int Stock { get; set;}
         public string ProductImageUrl { get; set; }
-        public Category? Category { get; set; }
+        public ICollection<ProductCategory> ProductCategories { get; set; }
+        public ICollection<OrderDetails> OrderDetails { get; set; }
+        public Brand? Brand { get; set; }
     }
 }
