@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EshopWebAPI.Models
 {
@@ -8,6 +9,6 @@ namespace EshopWebAPI.Models
         public int Id { get; set; }
         public int Pieces { get; set; }
         public Order Order { get; set; }
-        public ICollection<Product> Products { get; set;}
+        public Product Product { get; set;}
     }
 }

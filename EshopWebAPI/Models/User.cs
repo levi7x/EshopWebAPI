@@ -11,5 +11,6 @@ namespace EshopWebAPI.Models
         public DateTime CreatedDate { get; set; }
         public bool Subscribed { get; set; } = false;
         public Address? Address { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

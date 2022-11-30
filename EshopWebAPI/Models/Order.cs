@@ -6,9 +6,8 @@ namespace EshopWebAPI.Models
     {
         [Key]
         public int Id { get; set; }
-        public bool IsConfirmedOrder { get; set; } = false;
+        public bool IsConfirmedOrder { get; set; }
         public DateTime CreatedOrderDate { get; set; }
-        public bool IsCanceled { get; set; }
         public string OrderStatus { get; set; }
         public User User { get; set; }
     }
