@@ -1,6 +1,9 @@
 ﻿namespace EshopWebAPI.Data.Enum
 {
-    public class OrderStatus
+    public enum OrderStatus
     {
+        Cancelled,
+        Completed,
+        Pending
     }
 }

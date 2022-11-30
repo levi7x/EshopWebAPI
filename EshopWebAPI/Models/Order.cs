@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EshopWebAPI.Data.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace EshopWebAPI.Models
 {
@@ -6,9 +7,8 @@ namespace EshopWebAPI.Models
     {
         [Key]
         public int Id { get; set; }
-        public bool IsConfirmedOrder { get; set; }
         public DateTime CreatedOrderDate { get; set; }
-        public string OrderStatus { get; set; }
-        public User User { get; set; }
+        public OrderStatus Status { get; set; }
+        public ICollection<OrderDetails> Details { get; set; }
     }
 }
