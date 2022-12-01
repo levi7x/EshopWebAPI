@@ -23,7 +23,7 @@ namespace EshopWebAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProductCategory>().HasKey(pc => new { pc.CategoryId, pc.ProductId });
-            modelBuilder.Entity<ProductCategory>().HasOne(c => c.Product).WithMany(c => c.ProductCategories).HasForeignKey(pc => pc.productId);
+            modelBuilder.Entity<ProductCategory>().HasOne(c => c.Product).WithMany(c => c.ProductCategories).HasForeignKey(pc => pc.ProductId);
             modelBuilder.Entity<ProductCategory>().HasOne(c => c.Category).WithMany(c => c.ProductCategories).HasForeignKey(pc => pc.CategoryId);
 
             modelBuilder.Entity<OrderDetails>().HasKey(od => new { od.OrderId, od.ProductId });
