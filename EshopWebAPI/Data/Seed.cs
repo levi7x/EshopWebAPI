@@ -48,6 +48,7 @@ namespace EshopWebAPI.Data
             //}
 
 
+
             if (!dataContext.ProductCategories.Any())
             {
                 var productCategory = new List<ProductCategory>()

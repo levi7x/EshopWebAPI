@@ -15,5 +15,15 @@ namespace EshopWebAPI.Repository
         {
             return _context.Products.OrderBy(p => p.Id).ToList();
         }
+
+        public Product GetProduct(int id)
+        {
+            return _context.Products.Where(p => p.Id == id).FirstOrDefault();
+        }
+
+        public Product GetProduct(string productName)
+        {
+            return _context.Products.Where(p => p.ProductName == productName).FirstOrDefault();
+        }
     }
 }
