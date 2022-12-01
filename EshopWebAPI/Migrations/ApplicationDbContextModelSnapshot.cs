@@ -48,7 +48,7 @@ namespace EshopWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Adresses");
+                    b.ToTable("Adresses", (string)null);
                 });
 
             modelBuilder.Entity("EshopWebAPI.Models.Brand", b =>
@@ -69,7 +69,7 @@ namespace EshopWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("EshopWebAPI.Models.Category", b =>
@@ -90,7 +90,7 @@ namespace EshopWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("EshopWebAPI.Models.Order", b =>
@@ -114,7 +114,7 @@ namespace EshopWebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("EshopWebAPI.Models.OrderDetails", b =>
@@ -132,7 +132,7 @@ namespace EshopWebAPI.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("EshopWebAPI.Models.Product", b =>
@@ -168,7 +168,7 @@ namespace EshopWebAPI.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("EshopWebAPI.Models.ProductCategory", b =>
@@ -183,7 +183,7 @@ namespace EshopWebAPI.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("EshopWebAPI.Models.User", b =>
@@ -224,7 +224,7 @@ namespace EshopWebAPI.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("EshopWebAPI.Models.Order", b =>
