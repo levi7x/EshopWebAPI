@@ -1,28 +1,39 @@
-﻿using EshopWebAPI.Data.Interfaces;
+﻿using AutoMapper;
+using EshopWebAPI.Data;
+using EshopWebAPI.Data.Interfaces;
 using EshopWebAPI.Models;
 
 namespace EshopWebAPI.Repository
 {
     public class AddressRepository : IAddressRepository
     {
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+
+        public AddressRepository(ApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
         public bool AddressExists(int id)
         {
-            throw new NotImplementedException();
+            return _context.Adresses.Any(a => a.Id == id);
         }
 
-        public Address GetAddressByUser(int userId)
+        public Address GetAddressByUser(string userId)
         {
-            throw new NotImplementedException();
+            return _context.Users.Where(u => u.Id == userId).Select(a => a.Address).FirstOrDefault();
         }
 
         public ICollection<Address> GetAddresses()
         {
-            throw new NotImplementedException();
+            return _context.Adresses.ToList();
         }
 
-        public Address GetCountry(int id)
+        public Address GetAddress(int id)
         {
-            throw new NotImplementedException();
+            return _context.Adresses.Where(a => a.Id == id).FirstOrDefault();
         }
+
     }
 }
