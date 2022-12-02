@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace EshopWebAPI.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        [Key]
-        public string Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string PhoneNumber { get; set; }

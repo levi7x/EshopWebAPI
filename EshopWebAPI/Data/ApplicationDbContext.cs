@@ -1,9 +1,10 @@
 ﻿using EshopWebAPI.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EshopWebAPI.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -30,28 +31,7 @@ namespace EshopWebAPI.Data
             modelBuilder.Entity<OrderDetails>().HasOne(o => o.Order).WithMany(o => o.OrderDetails).HasForeignKey(od => od.OrderId);
             modelBuilder.Entity<OrderDetails>().HasOne(o => o.Product).WithMany(o => o.OrderDetails).HasForeignKey(od => od.ProductId);
 
-
-            //modelBuilder.Entity<Brand>().HasData(
-            //    new Brand
-            //    {
-            //        Id = 1,
-            //        BrandName = "Schecter",
-            //        BrandDescription = "This is brand called schecter"
-            //    },
-            //    new Brand
-            //    {
-            //        Id = 2,
-            //        BrandName = "Ephiphone",
-            //        BrandDescription = "This is brand called epiphone"
-            //    },
-            //    new Brand
-            //    {
-            //        Id = 3,
-            //        BrandName = "Cort",
-            //        BrandDescription = "This is brand called cort"
-            //    }
-            //    );
-
+            base.OnModelCreating(modelBuilder);
 
         }
     }

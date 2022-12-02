@@ -11,9 +11,9 @@ namespace EshopWebAPI.Controllers
     [ApiController]
     public class BrandController : ControllerBase
     {
-        private readonly IBrandRepositoy _brandRepositoy;
+        private readonly IBrandRepository _brandRepositoy;
 
-        public BrandController(IBrandRepositoy brandRepositoy)
+        public BrandController(IBrandRepository brandRepositoy)
         {
             _brandRepositoy = brandRepositoy;
         }
@@ -47,20 +47,20 @@ namespace EshopWebAPI.Controllers
             return Ok(brand);
         }
 
-        [HttpGet("{name:string}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetBrandByName(string name)
-        {
-            var brand = _brandRepositoy.GetBrand(name);
+        //[HttpGet("{name:string}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public IActionResult GetBrandByName(string name)
+        //{
+        //    var brand = _brandRepositoy.GetBrand(name);
 
-            if (brand == null)
-            {
-                return NotFound();
-            }
+        //    if (brand == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(brand);
-        }
+        //    return Ok(brand);
+        //}
     }
 }

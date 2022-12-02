@@ -28,21 +28,21 @@ namespace EshopWebAPI.Controllers
             return Ok(users);
         }
 
-        [HttpGet("{userId:string}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetUser(string userId)
-        {
+        //[HttpGet("{userId:string}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public IActionResult GetUser(string userId)
+        //{
 
-            var user = _mapper.Map<UserDto>(_userRepository.GetUser(userId));
+        //    var user = _mapper.Map<UserDto>(_userRepository.GetUser(userId));
 
-            if (user == null)
-            {
-                return NotFound();
-            }
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(user);
-        }
+        //    return Ok(user);
+        //}
     }
 }
