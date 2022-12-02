@@ -1,4 +1,5 @@
 ﻿using EshopWebAPI.Models;
+using Microsoft.AspNetCore.Identity;
 using System.Diagnostics.Metrics;
 
 namespace EshopWebAPI.Data
@@ -12,43 +13,6 @@ namespace EshopWebAPI.Data
         }
         public void SeedDataContext()
         {
-            //if (!dataContext.Products.Any())
-            //{
-            //    var product = new List<Product>()
-            //    {
-            //        new Product
-            //        {
-            //        ProductName = "Syn gates S",
-            //        Description = "This is syn gates model s",
-            //        Price = 1400,
-            //        Stock = 5,
-            //        ProductImageUrl = "",
-            //        Brand = new Brand()
-            //            {
-            //                BrandName = "Schecter",
-            //                BrandDescription = "This is brand called schecter"
-            //            }
-            //        },
-            //        new Product
-            //        {
-            //        ProductName = "Les paul standard",
-            //        Description = "This is les paul std",
-            //        Price = 2500,
-            //        Stock = 7,
-            //        ProductImageUrl = "",
-            //        Brand = new Brand()
-            //            {
-            //                BrandName = "Les Paul",
-            //                BrandDescription = "This is brand called les paul"
-            //            }
-            //        }
-            //    };
-            //    dataContext.Products.AddRange(product);
-            //    dataContext.SaveChanges();
-            //}
-
-
-
             if (!dataContext.ProductCategories.Any())
             {
                 var productCategory = new List<ProductCategory>()
@@ -119,6 +83,65 @@ namespace EshopWebAPI.Data
                 };
                 dataContext.ProductCategories.AddRange(productCategory);
                 dataContext.SaveChanges();
+            }
+        }
+
+        public static async Task SeedUsersAndRolesAsync(IApplicationBuilder applicationBuilder)
+        {
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            {
+                //Roles
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+                if (!await roleManager.RoleExistsAsync(UserRoles.User))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
+
+                //Users
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                string adminUserEmail = "simomarian99@gmail.com";
+
+                var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
+                if (adminUser == null)
+                {
+                    var newAdminUser = new User()
+                    {
+                        UserName = "levi7x",
+                        Email = adminUserEmail,
+                        EmailConfirmed = true,
+
+                        Address = new Address()
+                        {
+                            Street = "123 Main St",
+                            City = "Charlotte",
+                            State = "NC"
+                        }
+                    };
+                    await userManager.CreateAsync(newAdminUser, "Coding@1234?");
+                    await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);
+                }
+
+                string appUserEmail = "user@etickets.com";
+
+                var appUser = await userManager.FindByEmailAsync(appUserEmail);
+                if (appUser == null)
+                {
+                    var newAppUser = new User()
+                    {
+                        UserName = "app-user",
+                        Email = appUserEmail,
+                        EmailConfirmed = true,
+                        Address = new Address()
+                        {
+                            Street = "133 Main St",
+                            City = "Charlotte",
+                            State = "NC"
+                        }
+                    };
+                    await userManager.CreateAsync(newAppUser, "Coding@1234?");
+                    await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
+                }
             }
         }
     }

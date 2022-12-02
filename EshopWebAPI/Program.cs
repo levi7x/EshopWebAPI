@@ -1,7 +1,9 @@
 using EshopWebAPI.Data;
 using EshopWebAPI.Data.Interfaces;
 using EshopWebAPI.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using EshopWebAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
+builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddMemoryCache();
+
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -34,9 +39,12 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (args.Length == 1 && args[0].ToLower() == "seeddata")
-    SeedData(app);
 
+if (args.Length == 1 && args[0].ToLower() == "seeddata")
+{
+    //Seed.SeedData(app);
+    await Seed.SeedUsersAndRolesAsync(app);
+}
 void SeedData(IHost app)
 {
     var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
