@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EshopWebAPI.Data.Interfaces;
+using EshopWebAPI.Models;
 using EshopWebAPI.Models.Dto;
 using EshopWebAPI.Repository;
 using Microsoft.AspNetCore.Http;
@@ -71,5 +72,38 @@ namespace EshopWebAPI.Controllers
             return Ok(products);
         }
 
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult CreateCategory([FromBody] CategoryDto categoryCreate)
+        {
+            if (categoryCreate == null)
+            {
+                return BadRequest();
+            }
+
+            var category = _categoryRepository.GetCategories().Where(c => c.CategoryName.Trim().ToLower() == categoryCreate.CategoryName.TrimEnd().ToLower()).FirstOrDefault();
+
+            if (category != null) 
+            {
+                ModelState.AddModelError("", "Category already exists !");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var categoryMap = _mapper.Map<Category>(categoryCreate);
+
+            if (!_categoryRepository.CreateCategory(categoryMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return Ok("Sucessfully created");
+        }
     }
 }

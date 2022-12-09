@@ -7,5 +7,6 @@ namespace EshopWebAPI.Data.Interfaces
         ICollection<Product> GetProducts();
         public Product GetProduct(int id);
         public Product GetProduct(string productName);
+        public bool CreateProduct(Product product);
     }
 }

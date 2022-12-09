@@ -27,8 +27,8 @@ namespace EshopWebAPI.Controllers
             var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers());
             return Ok(users);
         }
-
-        //[HttpGet("{userId:string}")]
+        
+        //[HttpGet("/GetUserById/{userId}")]
         //[ProducesResponseType(StatusCodes.Status200OK)]
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[ProducesResponseType(StatusCodes.Status404NotFound)]

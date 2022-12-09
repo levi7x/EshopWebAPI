@@ -115,7 +115,8 @@ namespace EshopWebAPI.Data
                         {
                             Street = "123 Main St",
                             City = "Charlotte",
-                            State = "NC"
+                            State = "NC",
+                            PostalCode = "03601"
                         }
                     };
                     await userManager.CreateAsync(newAdminUser, "Coding@1234?");
@@ -136,7 +137,9 @@ namespace EshopWebAPI.Data
                         {
                             Street = "133 Main St",
                             City = "Charlotte",
-                            State = "NC"
+                            State = "NC",
+                            PostalCode = "03601"
+                            
                         }
                     };
                     await userManager.CreateAsync(newAppUser, "Coding@1234?");

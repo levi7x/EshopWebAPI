@@ -47,20 +47,20 @@ namespace EshopWebAPI.Controllers
             return Ok(brand);
         }
 
-        //[HttpGet("{name:string}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public IActionResult GetBrandByName(string name)
-        //{
-        //    var brand = _brandRepositoy.GetBrand(name);
+        [HttpGet("/GetBrandByName/{name}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetBrandByName(string name)
+        {
+            var brand = _brandRepositoy.GetBrand(name);
 
-        //    if (brand == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (brand == null)
+            {
+                return NotFound();
+            }
 
-        //    return Ok(brand);
-        //}
+            return Ok(brand);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using EshopWebAPI.Data.Interfaces;
 using EshopWebAPI.Models;
 using EshopWebAPI.Models.Dto;
+using EshopWebAPI.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,6 +51,35 @@ namespace EshopWebAPI.Controllers
             return Ok(product);
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult CreateProduct([FromBody] ProductDto createProduct)
+        {
+            if (createProduct == null)
+            {
+                return BadRequest(createProduct);
+            }
+
+            var product = _productRepository.GetProducts().FirstOrDefault(p=>p.ProductName.ToLower() == createProduct.ProductName.ToLower());
+
+            if (product != null)
+            {
+                ModelState.AddModelError("", "Product already exists !");
+                return BadRequest(createProduct);
+            }
+
+            var productMap = _mapper.Map<Product>(createProduct);
+
+            if (!_productRepository.CreateProduct(productMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return Ok(productMap);
+        }
 
     }
 }

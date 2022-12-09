@@ -25,5 +25,18 @@ namespace EshopWebAPI.Repository
         {
             return _context.Products.Where(p => p.ProductName == productName).FirstOrDefault();
         }
+
+        public bool CreateProduct(Product product)
+        {
+            _context.Products.Add(product);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0;
+        }
+
     }
 }

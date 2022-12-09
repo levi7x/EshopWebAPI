@@ -10,5 +10,7 @@ namespace EshopWebAPI.Data.Interfaces
         ICollection<Product> GetProductByCategory(int categoryId);
 
         bool CategoryExists(int categoryId);
+
+        public bool CreateCategory(Category category);
     }
 }

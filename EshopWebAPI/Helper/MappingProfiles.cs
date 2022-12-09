@@ -13,6 +13,9 @@ namespace EshopWebAPI.Helper
             CreateMap<Address, AddressDto>();
             CreateMap<User, UserDto>();
             CreateMap<Order, OrderDto>();
+
+            CreateMap<CategoryDto, Category>();
+            CreateMap<ProductDto, Product>();
         }
 
     }
