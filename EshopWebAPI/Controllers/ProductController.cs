@@ -78,7 +78,7 @@ namespace EshopWebAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return Ok(productMap);
+            return Ok(createProduct);
         }
 
     }

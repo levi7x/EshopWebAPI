@@ -28,5 +28,17 @@ namespace EshopWebAPI.Repository
         {
             return _context.Orders.ToList();
         }
+
+        public bool CreateOrder(Order order)
+        {
+            _context.OrderDetails.Add(order);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0;
+        }
     }
 }
