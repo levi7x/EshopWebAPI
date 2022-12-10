@@ -7,5 +7,6 @@ namespace EshopWebAPI.Data.Interfaces
         public User GetUser(string userId);
         public ICollection<User> GetUsers();
         public bool UserExists(string userId);
+
     }
 }

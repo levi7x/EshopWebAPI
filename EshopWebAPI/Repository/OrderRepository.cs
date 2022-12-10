@@ -31,7 +31,7 @@ namespace EshopWebAPI.Repository
 
         public bool CreateOrder(Order order)
         {
-            _context.OrderDetails.Add(order);
+            _context.Orders.Add(order);
             return Save();
         }
 

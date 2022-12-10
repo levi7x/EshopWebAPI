@@ -13,17 +13,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-//builder.Services
-//    .AddIdentityCore<IdentityUser>(options => {
-//        options.SignIn.RequireConfirmedAccount = false;
-//        options.User.RequireUniqueEmail = true;
-//        options.Password.RequireDigit = false;
-//        options.Password.RequiredLength = 6;
-//        options.Password.RequireNonAlphanumeric = false;
-//        options.Password.RequireUppercase = false;
-//        options.Password.RequireLowercase = false;
-//    })
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services
+    .AddIdentityCore<User>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.User.RequireUniqueEmail = true;
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddControllers();

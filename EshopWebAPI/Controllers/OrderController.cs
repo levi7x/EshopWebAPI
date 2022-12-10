@@ -50,34 +50,6 @@ namespace EshopWebAPI.Controllers
             return Ok(orders);
         }
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CreateOrder([FromBody] OrderDto createOrder)
-        {
-            if (createOrder == null)
-            {
-                return BadRequest(createOrder);
-            }
 
-            var product = _productRepository.GetProducts().FirstOrDefault(p => p.ProductName.ToLower() == createOrder.ProductName.ToLower());
-
-            if (product != null)
-            {
-                ModelState.AddModelError("", "Product already exists !");
-                return BadRequest(createOrder);
-            }
-
-            var productMap = _mapper.Map<Product>(createOrder);
-
-            if (!_productRepository.CreateProduct(productMap))
-            {
-                ModelState.AddModelError("", "Something went wrong while saving");
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-
-            return Ok(createOrder);
-        }
     }
 }
