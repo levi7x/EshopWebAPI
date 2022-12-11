@@ -2,6 +2,7 @@
 using EshopWebAPI.Data.Interfaces;
 using EshopWebAPI.Models.Dto;
 using EshopWebAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace EshopWebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes ="Bearer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetUsers()
         {

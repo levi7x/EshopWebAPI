@@ -1,5 +1,7 @@
 ﻿using EshopWebAPI.Models;
 using EshopWebAPI.Models.Dto;
+using EshopWebAPI.Services;
+using EshopWebAPI.Services.JWT;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -12,10 +14,12 @@ namespace EshopWebAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly JwtService _jwtService;
 
-        public AuthController(UserManager<User> userManager)
+        public AuthController(UserManager<User> userManager, JwtService jwtService)
         {
             _userManager = userManager;
+            _jwtService = jwtService;
         }
 
 
@@ -30,9 +34,11 @@ namespace EshopWebAPI.Controllers
                 return BadRequest(ModelState);
             }
             var userByEmail = await _userManager.FindByEmailAsync(user.Email);
+
             if(userByEmail != null)
             {
-                return Conflict(ModelState);
+                ModelState.AddModelError("", "User with that email already exists !");
+                return Conflict(user);
             }
 
             var result = await _userManager.CreateAsync(new User() { UserName = user.Email, Email = user.Email },user.Password);
@@ -44,6 +50,37 @@ namespace EshopWebAPI.Controllers
 
             user.Password = null;
             return Created("", user);
+        }
+
+
+        //login
+        [HttpPost("BearerToken")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<AuthenticationResponse>> CreateBearerToken(AuthenticationRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Bad credentials");
+            }
+
+            var user = await _userManager.FindByNameAsync(request.UserName);
+
+            if (user == null)
+            {
+                return BadRequest("Bad credentials");
+            }
+
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+
+            if (!isPasswordValid)
+            {
+                return BadRequest("Bad credentials");
+            }
+
+            var token = _jwtService.CreateToken(user);
+
+            return Ok(token);
         }
     }
 }
