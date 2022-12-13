@@ -1,4 +1,5 @@
-﻿using EshopWebAPI.Models;
+﻿using EshopWebAPI.Data;
+using EshopWebAPI.Models;
 using EshopWebAPI.Models.Dto;
 using EshopWebAPI.Services;
 using EshopWebAPI.Services.JWT;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace EshopWebAPI.Controllers
 {
@@ -40,13 +42,18 @@ namespace EshopWebAPI.Controllers
                 ModelState.AddModelError("", "User with that email already exists !");
                 return Conflict(user);
             }
+            var newUser = new User() { UserName = user.Email, Email = user.Email };
 
-            var result = await _userManager.CreateAsync(new User() { UserName = user.Email, Email = user.Email },user.Password);
+            var result = await _userManager.CreateAsync(newUser,user.Password);
 
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
             }
+
+            var roleResult = await _userManager.AddToRoleAsync(newUser, UserRoles.User);
+
+            if (!roleResult.Succeeded) return BadRequest(result.Errors);
 
             user.Password = null;
             return Created("", user);
@@ -79,6 +86,7 @@ namespace EshopWebAPI.Controllers
             }
 
             var token = _jwtService.CreateToken(user);
+
 
             return Ok(token);
         }

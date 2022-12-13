@@ -40,5 +40,12 @@ namespace EshopWebAPI.Repository
             var saved = _context.SaveChanges();
             return saved > 0;
         }
+
+        public bool HasActiveOrder(string userId)
+        {
+            var orders = _context.Orders.Where(o => o.User.Id == userId && o.IsOrderActive == true).ToList();
+            
+            return orders.Any();
+        }
     }
 }

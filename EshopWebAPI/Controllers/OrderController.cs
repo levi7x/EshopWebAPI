@@ -3,8 +3,10 @@ using EshopWebAPI.Data.Interfaces;
 using EshopWebAPI.Models;
 using EshopWebAPI.Models.Dto;
 using EshopWebAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EshopWebAPI.Controllers
 {
@@ -14,11 +16,13 @@ namespace EshopWebAPI.Controllers
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
 
-        public OrderController(IOrderRepository orderRepository, IMapper mapper)
+        public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
@@ -48,6 +52,46 @@ namespace EshopWebAPI.Controllers
             }
 
             return Ok(orders);
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult CreateOrder()
+        {
+            var currentUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (_orderRepository.HasActiveOrder(currentUserId))
+            {
+                return Ok();
+            }
+
+            var user = _userRepository.GetUser(currentUserId);
+            
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            Order createdOrder = new Order()
+            {
+                CreatedOrderDate = DateTime.Now,
+                Status = Data.Enum.OrderStatus.Pending,
+                IsOrderActive = true,
+                User = user
+            };
+
+            _orderRepository.CreateOrder(createdOrder);
+
+            var orderDto = new OrderDto()
+            {
+                CreatedOrderDate = createdOrder.CreatedOrderDate,
+                Status = createdOrder.Status
+            };
+
+            return Ok(orderDto);
         }
 
 

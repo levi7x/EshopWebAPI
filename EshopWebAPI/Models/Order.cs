@@ -10,6 +10,7 @@ namespace EshopWebAPI.Models
         public DateTime CreatedOrderDate { get; set; }
         public OrderStatus Status { get; set; }
         public ICollection<OrderDetails> OrderDetails { get; set; }
+        public bool IsOrderActive { get; set; }
         public User User { get; set; }
     }
 }

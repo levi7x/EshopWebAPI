@@ -8,5 +8,7 @@ namespace EshopWebAPI.Data.Interfaces
         public Order GetOrder(int orderId);
         public ICollection<Order> GetOrdersByUser(string userId);
         public bool CreateOrder(Order order);
+
+        public bool HasActiveOrder(string userId);
     }
 }
