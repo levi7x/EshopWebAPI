@@ -70,7 +70,7 @@ namespace EshopWebAPI.Controllers
             {
                 return BadRequest("Bad credentials");
             }
-
+            
             var user = await _userManager.FindByNameAsync(request.UserName);
 
             if (user == null)

@@ -17,12 +17,14 @@ namespace EshopWebAPI.Controllers
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IProductRepository _productRepository;
 
-        public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository)
+        public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, IProductRepository productRepository)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _productRepository = productRepository;
         }
 
         [HttpGet]
@@ -94,6 +96,59 @@ namespace EshopWebAPI.Controllers
             return Ok(orderDto);
         }
 
+        //add to cart
+
+        [HttpPost("/cart/{productId}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult AddProductToOrder(int productId)
+        {
+            var currentUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!_orderRepository.HasActiveOrder(currentUserId))
+            {
+                return NotFound();
+            }
+
+            var activeOrder = _orderRepository.GetActiveOrder(currentUserId);
+
+            var product = _productRepository.GetProduct(productId);
+
+            if (product == null)
+            {
+                return BadRequest();
+            }
+
+            var result = _orderRepository.AddProductToOrder(product, activeOrder);
+
+            return Ok(result);
+        }
+
+        [HttpDelete("/cart/delete")]
+        [Authorize]
+        public IActionResult DeleteProductFromOrder(int productId) 
+        {
+            var currentUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!_orderRepository.HasActiveOrder(currentUserId))
+            {
+                return NotFound();
+            }
+
+            var activeOrder = _orderRepository.GetActiveOrder(currentUserId);
+
+            var product = _productRepository.GetProduct(productId);
+
+            if (product == null)
+            {
+                return BadRequest();
+            }
+
+            _orderRepository.RemoveProductFromOrder(product, activeOrder);
+            return NoContent();
+        }
 
     }
 }

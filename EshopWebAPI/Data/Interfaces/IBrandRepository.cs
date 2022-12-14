@@ -7,7 +7,6 @@ namespace EshopWebAPI.Data.Interfaces
         public ICollection<Brand> GetBrands();
         public Brand GetBrand(int id);
         public Brand GetBrand(string name);
-
         public bool BrandExists(int id);
     }
 }

@@ -9,7 +9,7 @@ namespace EshopWebAPI.Services
 {
     public class JwtService
     {
-        private const int EXPIRATION_MINUTES = 1;
+        private const int EXPIRATION_MINUTES = 5;
 
         private readonly IConfiguration _configuration;
 
