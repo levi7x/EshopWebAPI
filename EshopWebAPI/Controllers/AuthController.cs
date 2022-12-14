@@ -42,7 +42,16 @@ namespace EshopWebAPI.Controllers
                 ModelState.AddModelError("", "User with that email already exists !");
                 return Conflict(user);
             }
-            var newUser = new User() { UserName = user.Email, Email = user.Email };
+
+            var Address = new Address()
+            {
+                Street = "",
+                City = "",
+                State = "",
+                PostalCode = ""
+            };
+
+            var newUser = new User() { UserName = user.Email, Email = user.Email, Address = Address };
 
             var result = await _userManager.CreateAsync(newUser,user.Password);
 

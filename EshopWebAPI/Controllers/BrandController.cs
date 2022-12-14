@@ -62,5 +62,48 @@ namespace EshopWebAPI.Controllers
 
             return Ok(brand);
         }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult CreateBrand([FromBody] Brand brand)
+        {
+            if (brand == null)
+            {
+                return BadRequest();
+            }
+
+            var result = _brandRepositoy.CreateBrand(brand);
+
+            if (!result)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+
+            }
+
+            return Ok(brand);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateBrand([FromBody] Brand brand)
+        {
+            if (brand == null)
+            {
+                return BadRequest();
+            }
+
+            var result = _brandRepositoy.UpdateBrand(brand);
+
+            if (!result)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return Ok(brand);
+        }
     }
 }

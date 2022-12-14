@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using EshopWebAPI.Data.Interfaces;
+using EshopWebAPI.Models;
 using EshopWebAPI.Models.Dto;
 using EshopWebAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EshopWebAPI.Controllers
 {
@@ -64,6 +66,36 @@ namespace EshopWebAPI.Controllers
                 return BadRequest();
             }
             return Ok(address);
+        }
+
+
+        [HttpPut]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateAddress([FromBody] AddressDto addressDto)
+        {
+            if (addressDto == null)
+            {
+                return BadRequest();
+            }
+            var currentUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var userAddress = _addressRepository.GetAddressByUser(currentUserId);
+
+            var newAddress = _mapper.Map<Address>(addressDto);
+
+            newAddress.Id = userAddress.Id;
+
+            var result = _addressRepository.UpdateAddress(newAddress);
+
+            if(!result)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return Ok(newAddress);
         }
 
         

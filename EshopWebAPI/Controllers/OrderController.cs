@@ -96,7 +96,7 @@ namespace EshopWebAPI.Controllers
             return Ok(orderDto);
         }
 
-        //add to cart
+        //add to cart -> relational
 
         [HttpPost("/cart/{productId}")]
         [Authorize]

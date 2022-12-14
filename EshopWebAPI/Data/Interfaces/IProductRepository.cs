@@ -10,8 +10,10 @@ namespace EshopWebAPI.Data.Interfaces
         public bool CreateProduct(Product product);
         public bool UpdateProduct(Product product);
         public bool DeleteProduct(int id);
+        //relational
         public bool AddBrandToProduct(Brand brand, Product product);
         public bool AddProductToCategory(Product product, Category category);
         public bool RemoveProductFromCategory(Product product, Category category);
+        public bool IfProductHasCategory(Product product, Category category);
     }
 }

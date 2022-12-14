@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EshopWebAPI.Data.Interfaces;
+using EshopWebAPI.Models;
 using EshopWebAPI.Models.Dto;
 using EshopWebAPI.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -48,5 +49,34 @@ namespace EshopWebAPI.Controllers
             return Ok(user);
         }
 
+        [HttpPut]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateUserInfo([FromBody] UserDto userDto)
+        {
+            var currentUserId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userDto == null)
+            {
+                return BadRequest();
+            }
+
+            var user = _userRepository.GetUserAsNoTracking(currentUserId);
+
+            user.PhoneNumber = userDto.PhoneNumber;
+            user.Name = userDto.Name;
+            user.Surname = userDto.Surname;
+
+            var result = _userRepository.UpdateUser(user);
+
+            if (!result)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return Ok(userDto);
+        }
     }
 }

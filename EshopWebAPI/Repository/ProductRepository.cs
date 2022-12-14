@@ -79,5 +79,14 @@ namespace EshopWebAPI.Repository
             _context.Remove(productCategory);
             return Save();
         }
+
+        public bool IfProductHasCategory(Product product, Category category)
+        {
+            var productCategory = _context.ProductCategories.Any(pc => pc.ProductId == product.Id && pc.CategoryId == category.Id);
+
+            if (productCategory) { return true; };
+
+            return false;
+        }
     }
 }

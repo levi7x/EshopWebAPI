@@ -8,6 +8,9 @@ namespace EshopWebAPI.Data.Interfaces
         public Order GetOrder(int orderId);
         public ICollection<Order> GetOrdersByUser(string userId);
         public bool CreateOrder(Order order);
+        //public bool UpdateOrder(Order order);
+
+        //relational
         public bool HasActiveOrder(string userId);
         public bool IncrementPieces(OrderDetails orderDetails);
         public bool IncrementPieces(OrderDetails orderDetails, bool increment);

@@ -105,5 +105,25 @@ namespace EshopWebAPI.Controllers
 
             return Ok("Sucessfully created");
         }
+
+        [HttpPut("categoryId")]
+        public IActionResult UpdateCategory([FromBody] CategoryDto categoryDto, int categoryId)
+        {
+            if (categoryDto == null || categoryDto.Id != categoryId)
+            {
+                return BadRequest();
+            }
+
+            var category = _mapper.Map<Category>(categoryDto);
+
+            var result = _categoryRepository.UpdateCategory(category);
+
+            if (!result)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return Ok(category);
+        }
     }
 }

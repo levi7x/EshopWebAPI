@@ -14,11 +14,15 @@ namespace EshopWebAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
+        private readonly IBrandRepository _brandRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
 
-        public ProductController(IProductRepository productRepository, IMapper mapper)
+        public ProductController(IProductRepository productRepository,IBrandRepository brandRepository,ICategoryRepository categoryRepository,  IMapper mapper)
         {
             _productRepository = productRepository;
+            _brandRepository = brandRepository;
+            _categoryRepository = categoryRepository;
             _mapper = mapper;
         }
 
@@ -82,42 +86,14 @@ namespace EshopWebAPI.Controllers
             return Ok(createProduct);
         }
 
-        [HttpPost("addBrand/{productId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult AddBrandToProduct([FromBody] Brand brand, int productId)
-        {
-            if (brand == null)
-            {
-                return BadRequest();
-            }
-
-            var product = _productRepository.GetProduct(productId);
-
-            if (product == null)
-            {
-                return BadRequest();
-            }
-
-            var result = _productRepository.AddBrandToProduct(brand, product);
-
-            if (!result)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-
-            return Ok(product);
-        }
 
         //todo verify if i need seperate id
         [HttpPut("{productId}")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult UpdateProduct(int productId, [FromBody] ProductDto productDto)
         {
-            if (productDto == null || productId != productDto.Id)
+            if (productDto == null)
             {
                 return BadRequest();
             }
@@ -145,24 +121,35 @@ namespace EshopWebAPI.Controllers
             return NoContent();
         }
 
+
+        //relational
+
+
         [HttpPost("createCategory/{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult AddProductToCategory(int productId, [FromBody] CategoryDto categoryDto)
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public IActionResult AddProductToCategory(int productId, int categoryId)
         {
-            if (productId == 0 || categoryDto == null)
-            {
-                return BadRequest();
-            }
-
             var product = _productRepository.GetProduct(productId);
+            var category = _categoryRepository.GetCategory(categoryId);
 
-            if (product == null)
+            if (product == null || category == null)
             {
                 return BadRequest();
             }
-            var category = _mapper.Map<Category>(categoryDto);
+
+            if (_productRepository.IfProductHasCategory(product, category))
+            {
+                return Conflict();
+            }
+
             var result = _productRepository.AddProductToCategory(product, category);
+
+            if (!result)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
 
             return Ok(result);
         }
@@ -170,24 +157,56 @@ namespace EshopWebAPI.Controllers
         [HttpDelete("{productId}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult RemoveCategoryFromProduct(int productId, [FromBody] CategoryDto categoryDto)
+        public IActionResult RemoveCategoryFromProduct(int productId, int categoryId)
         {
-            if (productId == 0)
+
+            var product = _productRepository.GetProduct(productId);
+            var category = _categoryRepository.GetCategory(categoryId);
+
+            if (product == null || category == null)
             {
                 return BadRequest();
             }
+
+            var result = _productRepository.RemoveProductFromCategory(product, category);
+
+            if (!result)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return NoContent();
+        }
+
+
+        [HttpPost("addBrand/{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult AddBrandToProduct(int brandId, int productId)
+        {
+            var brand = _brandRepository.GetBrand(brandId);
+
+            if (brand == null)
+            {
+                return NotFound();
+            }
+
             var product = _productRepository.GetProduct(productId);
 
             if (product == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            var category = _mapper.Map<Category>(categoryDto);
+            var result = _productRepository.AddBrandToProduct(brand, product);
 
-            _productRepository.RemoveProductFromCategory(product, category);
+            if (!result)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
 
-            return NoContent();
+            return Ok(brand);
         }
     }
 }
