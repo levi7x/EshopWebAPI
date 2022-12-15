@@ -35,18 +35,18 @@ namespace EshopWebAPI.Controllers
             return Ok(products);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{productId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetProduct(int id)
+        public IActionResult GetProduct(int productId)
         {
-            if (id == 0)
+            if (productId == 0)
             {
                 return BadRequest();
             }
 
-            var product = _mapper.Map<ProductDto>(_productRepository.GetProduct(id));
+            var product = _mapper.Map<ProductDto>(_productRepository.GetProduct(productId));
 
             if (product == null)
             {
@@ -106,7 +106,7 @@ namespace EshopWebAPI.Controllers
         }
 
         //todo add authorize
-        [HttpDelete]
+        [HttpDelete("{productId}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult DeleteProduct(int productId)
@@ -125,7 +125,7 @@ namespace EshopWebAPI.Controllers
         //relational
 
 
-        [HttpPost("createCategory/{productId}")]
+        [HttpPost("AddCategory/{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -154,7 +154,7 @@ namespace EshopWebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{productId}")]
+        [HttpDelete("RemoveCategory/{productId}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult RemoveCategoryFromProduct(int productId, int categoryId)
@@ -179,7 +179,7 @@ namespace EshopWebAPI.Controllers
         }
 
 
-        [HttpPost("addBrand/{productId}")]
+        [HttpPost("AddBrand/{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

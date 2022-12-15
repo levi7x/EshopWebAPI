@@ -32,7 +32,7 @@ namespace EshopWebAPI.Controllers
             return Ok(users);
         }
 
-        [HttpGet("GetUserById/{userId}")]
+        [HttpGet("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

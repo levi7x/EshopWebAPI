@@ -26,18 +26,18 @@ namespace EshopWebAPI.Controllers
             return Ok(brands);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{brandId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetBrandByName(int id)
+        public IActionResult GetBrandByName(int brandId)
         {
-            if (id == 0)
+            if (brandId == 0)
             {
                 return BadRequest();
             }
 
-            var brand = _brandRepositoy.GetBrand(id);
+            var brand = _brandRepositoy.GetBrand(brandId);
 
             if (brand == null)
             {
@@ -47,7 +47,7 @@ namespace EshopWebAPI.Controllers
             return Ok(brand);
         }
 
-        [HttpGet("/GetBrandByName/{name}")]
+        [HttpGet("{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -54,7 +54,7 @@ namespace EshopWebAPI.Controllers
             return Ok(address);
         }
 
-        [HttpGet("/users/{userId}")]
+        [HttpGet("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetAddressByUser(string userId)

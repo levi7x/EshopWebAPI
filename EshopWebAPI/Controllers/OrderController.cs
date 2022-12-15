@@ -98,7 +98,7 @@ namespace EshopWebAPI.Controllers
 
         //add to cart -> relational
 
-        [HttpPost("/cart/{productId}")]
+        [HttpPost("cart/{productId}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -126,7 +126,7 @@ namespace EshopWebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("/cart/delete")]
+        [HttpDelete("cart/{productId}")]
         [Authorize]
         public IActionResult DeleteProductFromOrder(int productId) 
         {

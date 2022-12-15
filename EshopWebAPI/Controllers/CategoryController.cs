@@ -106,7 +106,7 @@ namespace EshopWebAPI.Controllers
             return Ok("Sucessfully created");
         }
 
-        [HttpPut("categoryId")]
+        [HttpPut("{categoryId}")]
         public IActionResult UpdateCategory([FromBody] CategoryDto categoryDto, int categoryId)
         {
             if (categoryDto == null || categoryDto.Id != categoryId)
