@@ -5,6 +5,7 @@ using EshopWebAPI.Models.Dto;
 using EshopWebAPI.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace EshopWebAPI.Controllers
 {
@@ -14,11 +15,13 @@ namespace EshopWebAPI.Controllers
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoryController(ICategoryRepository categoryRepository, IMapper mapper, ILogger<CategoryController> logger)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -26,6 +29,7 @@ namespace EshopWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetCategories()
         {
+            _logger.LogInformation(DateTime.UtcNow + "Getting all categories");
             var categories = _mapper.Map<List<CategoryDto>>(_categoryRepository.GetCategories());
             return Ok(categories);
         }
@@ -40,11 +44,12 @@ namespace EshopWebAPI.Controllers
             {
                 return BadRequest();
             }
-
+            _logger.LogInformation(DateTime.UtcNow + $" Getting category by id: {categoryId}");
             var category = _mapper.Map<CategoryDto>(_categoryRepository.GetCategory(categoryId));
 
             if (category == null)
             {
+                _logger.LogWarning(DateTime.UtcNow + $"Category with id: {categoryId} was not found");
                 return NotFound();
             }
 
@@ -61,11 +66,12 @@ namespace EshopWebAPI.Controllers
             {
                 return BadRequest();
             }
-
+            _logger.LogInformation(DateTime.UtcNow + $" Getting product by category {categoryId}");
             var products = _mapper.Map<List<ProductDto>>(_categoryRepository.GetProductByCategory(categoryId));
 
             if (products == null)
             {
+                _logger.LogWarning(DateTime.UtcNow + $"Products by category with id: {categoryId} were not found");
                 return NotFound();
             }
 

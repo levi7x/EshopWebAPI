@@ -17,7 +17,7 @@ namespace EshopWebAPI.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IUserRepository userRepository, IMapper mapper, ILogger<UserController> logger)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -28,6 +28,7 @@ namespace EshopWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetUsers()
         {
+            
             var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers());
             return Ok(users);
         }

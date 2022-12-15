@@ -18,19 +18,22 @@ namespace EshopWebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IProductRepository _productRepository;
+        private readonly ILogger<OrderController> _logger;
 
-        public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, IProductRepository productRepository)
+        public OrderController(IOrderRepository orderRepository, IMapper mapper, IUserRepository userRepository, IProductRepository productRepository, ILogger<OrderController> logger)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
             _userRepository = userRepository;
             _productRepository = productRepository;
+            _logger = logger;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetOrders() 
         {
+            _logger.LogInformation(DateTime.UtcNow + "Getting all orders");
             var orders = _mapper.Map<List<OrderDto>>(_orderRepository.GetOrders());
             return Ok(orders);
         }
@@ -45,11 +48,12 @@ namespace EshopWebAPI.Controllers
             {
                 return BadRequest();
             }
-
+            _logger.LogInformation(DateTime.UtcNow + $" Getting order with id {orderId}");
             var orders = _mapper.Map<OrderDto>(_orderRepository.GetOrder(orderId));
 
             if (orders == null)
             {
+                _logger.LogWarning(DateTime.UtcNow + $"Category with id: {orderId} was not found");
                 return NotFound();
             }
 

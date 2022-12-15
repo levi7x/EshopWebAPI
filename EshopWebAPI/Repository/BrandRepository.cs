@@ -30,7 +30,7 @@ namespace EshopWebAPI.Repository
 
         public Brand GetBrand(string name)
         {
-            return _context.Brands.Where(b => b.BrandName == name).FirstOrDefault();
+            return _context.Brands.Where(b => b.BrandName.ToLower() == name.ToLower()).FirstOrDefault();
         }
 
         public ICollection<Brand> GetBrands()

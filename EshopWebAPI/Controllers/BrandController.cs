@@ -12,16 +12,19 @@ namespace EshopWebAPI.Controllers
     public class BrandController : ControllerBase
     {
         private readonly IBrandRepository _brandRepositoy;
+        private readonly ILogger _logger;
 
-        public BrandController(IBrandRepository brandRepositoy)
+        public BrandController(IBrandRepository brandRepositoy, ILogger<BrandController> logger)
         {
             _brandRepositoy = brandRepositoy;
+            _logger = logger;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetBrands()
         {
+            _logger.LogInformation(DateTime.UtcNow + " Getting all Brands");
             var brands = _brandRepositoy.GetBrands();
             return Ok(brands);
         }
@@ -30,33 +33,40 @@ namespace EshopWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetBrandByName(int brandId)
+        public IActionResult GetBrandById(int brandId)
         {
             if (brandId == 0)
             {
                 return BadRequest();
             }
-
+            _logger.LogInformation(DateTime.UtcNow + $" Getting brand by id: {brandId}");
             var brand = _brandRepositoy.GetBrand(brandId);
 
             if (brand == null)
             {
+                _logger.LogWarning(DateTime.UtcNow + $" Brand with the id: {brandId} was not found");
                 return NotFound();
             }
 
             return Ok(brand);
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("name/{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetBrandByName(string name)
         {
+            if (name == null)
+            {
+                return BadRequest();
+            }
+            _logger.LogInformation(DateTime.UtcNow + $" Getting brand {name}");
             var brand = _brandRepositoy.GetBrand(name);
 
             if (brand == null)
             {
+                _logger.LogWarning(DateTime.UtcNow + $" Brand {name} was not found");
                 return NotFound();
             }
 

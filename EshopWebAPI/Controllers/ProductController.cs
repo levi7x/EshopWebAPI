@@ -17,13 +17,15 @@ namespace EshopWebAPI.Controllers
         private readonly IBrandRepository _brandRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<ProductController> _logger;
 
-        public ProductController(IProductRepository productRepository,IBrandRepository brandRepository,ICategoryRepository categoryRepository,  IMapper mapper)
+        public ProductController(IProductRepository productRepository,IBrandRepository brandRepository,ICategoryRepository categoryRepository,  IMapper mapper, ILogger<ProductController> logger)
         {
             _productRepository = productRepository;
             _brandRepository = brandRepository;
             _categoryRepository = categoryRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -31,6 +33,7 @@ namespace EshopWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetProducts()
         {
+            _logger.LogInformation(DateTime.UtcNow + " Getting all products");
             var products = _mapper.Map<List<ProductDto>>(_productRepository.GetProducts());
             return Ok(products);
         }
@@ -45,11 +48,12 @@ namespace EshopWebAPI.Controllers
             {
                 return BadRequest();
             }
-
+            _logger.LogInformation(DateTime.UtcNow + $"Getting product with id: {productId}");
             var product = _mapper.Map<ProductDto>(_productRepository.GetProduct(productId));
 
             if (product == null)
             {
+                _logger.LogWarning(DateTime.UtcNow + $"Product with id: {productId} was not found");
                 return NotFound();
             }
 

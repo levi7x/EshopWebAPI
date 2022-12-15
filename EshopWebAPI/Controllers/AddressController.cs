@@ -16,11 +16,13 @@ namespace EshopWebAPI.Controllers
     {
         private readonly IAddressRepository _addressRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public AddressController(IAddressRepository addressRepository, IMapper mapper)
+        public AddressController(IAddressRepository addressRepository, IMapper mapper, ILogger<AddressController> logger)
         {
             _addressRepository = addressRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -29,6 +31,7 @@ namespace EshopWebAPI.Controllers
         public IActionResult GetAddresses()
         {
             var addresses = _mapper.Map<List<AddressDto>>(_addressRepository.GetAddresses());
+            _logger.LogInformation(DateTime.UtcNow + " Getting all addresses");
             return Ok(addresses);
         }
 
@@ -43,11 +46,12 @@ namespace EshopWebAPI.Controllers
             {
                 return BadRequest();
             }
-
+            _logger.LogInformation(DateTime.UtcNow + $" Getting address with id {addressId}");
             var address = _mapper.Map<AddressDto>(_addressRepository.GetAddress(addressId));
 
             if (address == null)
             {
+                _logger.LogWarning(DateTime.UtcNow + $" Address with id: {addressId} not found");
                 return NotFound();
             }
 
@@ -60,7 +64,7 @@ namespace EshopWebAPI.Controllers
         public IActionResult GetAddressByUser(string userId)
         {
             var address = _mapper.Map<AddressDto>(_addressRepository.GetAddressByUser(userId));
-
+            _logger.LogInformation(DateTime.UtcNow + $" Getting address by user with id: {userId}");
             if (!ModelState.IsValid)
             {
                 return BadRequest();
