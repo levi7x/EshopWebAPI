@@ -16,11 +16,13 @@ namespace EshopWebAPI.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<UserController> _logger;
 
         public UserController(IUserRepository userRepository, IMapper mapper, ILogger<UserController> logger)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -28,7 +30,7 @@ namespace EshopWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetUsers()
         {
-            
+            _logger.LogInformation(DateTime.UtcNow + " Getting all users");
             var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers());
             return Ok(users);
         }
@@ -39,11 +41,12 @@ namespace EshopWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetUserById(string userId)
         {
-
+            _logger.LogInformation(DateTime.UtcNow + $" Getting user with id: {userId}");
             var user = _mapper.Map<UserDto>(_userRepository.GetUser(userId));
 
             if (user == null)
             {
+                _logger.LogWarning(DateTime.UtcNow + $"User with id: {userId} was not found");
                 return NotFound();
             }
 

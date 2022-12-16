@@ -1,4 +1,5 @@
 ﻿using EshopWebAPI.Models;
+using EshopWebAPI.Models.Dto;
 
 namespace EshopWebAPI.Data.Interfaces
 {
@@ -15,5 +16,8 @@ namespace EshopWebAPI.Data.Interfaces
         public bool AddProductToCategory(Product product, Category category);
         public bool RemoveProductFromCategory(Product product, Category category);
         public bool IfProductHasCategory(Product product, Category category);
+
+        //UNIT TEST WRAPPER
+        Product GetProductByNameToLower(ProductDto createProduct);
     }
 }

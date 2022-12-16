@@ -71,7 +71,8 @@ namespace EshopWebAPI.Controllers
                 return BadRequest(createProduct);
             }
 
-            var product = _productRepository.GetProducts().FirstOrDefault(p=>p.ProductName.ToLower() == createProduct.ProductName.ToLower());
+            //var product = _productRepository.GetProducts().FirstOrDefault(p=>p.ProductName.ToLower() == createProduct.ProductName.ToLower());
+            var product = _productRepository.GetProductByNameToLower(createProduct);
 
             if (product != null)
             {

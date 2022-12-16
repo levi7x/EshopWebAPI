@@ -1,6 +1,7 @@
 ﻿using EshopWebAPI.Data;
 using EshopWebAPI.Data.Interfaces;
 using EshopWebAPI.Models;
+using EshopWebAPI.Models.Dto;
 
 namespace EshopWebAPI.Repository
 {
@@ -76,7 +77,7 @@ namespace EshopWebAPI.Repository
         public bool RemoveProductFromCategory(Product product, Category category)
         {
             var productCategory = _context.ProductCategories.FirstOrDefault(pc=>pc.ProductId== product.Id && pc.CategoryId == category.Id);
-            _context.Remove(productCategory);
+            _context.ProductCategories.Remove(productCategory);
             return Save();
         }
 
@@ -87,6 +88,15 @@ namespace EshopWebAPI.Repository
             if (productCategory) { return true; };
 
             return false;
+        }
+
+        //for unit testing
+
+        public Product GetProductByNameToLower(ProductDto createProduct)
+        {
+            //wraping into method
+            var productNameToLower = GetProducts().FirstOrDefault(p => p.ProductName.ToLower() == createProduct.ProductName.ToLower());
+            return productNameToLower;
         }
     }
 }
