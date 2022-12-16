@@ -80,6 +80,11 @@ builder.Services
         };
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ElevatedRights", policy =>
+          policy.RequireRole(UserRoles.Admin, UserRoles.User));
+});
 
 builder.Services.AddSwaggerGen(options =>
  options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()

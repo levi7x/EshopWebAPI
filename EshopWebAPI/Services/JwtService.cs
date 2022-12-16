@@ -1,4 +1,5 @@
-﻿using EshopWebAPI.Services.JWT;
+﻿using EshopWebAPI.Models;
+using EshopWebAPI.Services.JWT;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,16 +19,16 @@ namespace EshopWebAPI.Services
             _configuration = configuration;
         }
 
-        public AuthenticationResponse CreateToken(IdentityUser user)
+        public AuthenticationResponse CreateToken(User user, string role)
         {
             var expiration = DateTime.UtcNow.AddMinutes(EXPIRATION_MINUTES);
 
             var token = CreateJwtToken(
-                CreateClaims(user),
+                CreateClaims(user,role),
                 CreateSigningCredentials(),
                 expiration
             );
-
+            
             var tokenHandler = new JwtSecurityTokenHandler();
 
             return new AuthenticationResponse
@@ -45,15 +46,16 @@ namespace EshopWebAPI.Services
                 expires: expiration,
                 signingCredentials: credentials
             );
-
-        private Claim[] CreateClaims(IdentityUser user) =>
+        
+        private Claim[] CreateClaims(User user,string role) =>
             new[] {
                 //new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, role)            
             };
 
         private SigningCredentials CreateSigningCredentials() =>

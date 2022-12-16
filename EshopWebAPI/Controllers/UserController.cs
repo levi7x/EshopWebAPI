@@ -26,7 +26,7 @@ namespace EshopWebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetUsers()
         {

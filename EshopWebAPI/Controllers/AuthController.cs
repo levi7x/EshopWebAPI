@@ -94,7 +94,13 @@ namespace EshopWebAPI.Controllers
                 return BadRequest("Bad credentials");
             }
 
-            var token = _jwtService.CreateToken(user);
+            var userRole = await _userManager.GetRolesAsync(user);
+            if (userRole == null)
+            {
+                return BadRequest("User not in role");
+            }
+
+            var token = _jwtService.CreateToken(user, userRole.First());
 
 
             return Ok(token);

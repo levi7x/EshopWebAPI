@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EshopWebAPI.Data;
 using EshopWebAPI.Data.Interfaces;
 using EshopWebAPI.Models;
 using EshopWebAPI.Models.Dto;
@@ -27,6 +28,7 @@ namespace EshopWebAPI.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = UserRoles.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetAddresses()
         {
