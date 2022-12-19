@@ -20,6 +20,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 });
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
+builder.Services.AddCors(policyBuilder => policyBuilder.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:3000", "http://192.168.100.7:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services
     .AddIdentityCore<User>(options =>
@@ -68,12 +70,9 @@ builder.Services
     {
         options.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
             ValidateIssuerSigningKey = true,
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
             )
@@ -114,8 +113,10 @@ options.AddSecurityRequirement(new OpenApiSecurityRequirement
  }));
 
 
+
 var app = builder.Build();
 
+app.UseCors();
 
 if (args.Length == 1 && args[0].ToLower() == "seeddata")
 {
