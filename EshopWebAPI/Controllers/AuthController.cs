@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using EshopWebAPI.Data;
+using EshopWebAPI.Data.Interfaces;
 using EshopWebAPI.Models;
 using EshopWebAPI.Models.Dto;
 using EshopWebAPI.Services;
@@ -20,11 +21,13 @@ namespace EshopWebAPI.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly JwtService _jwtService;
+        private readonly IUserRepository _userRepository;
 
-        public AuthController(UserManager<User> userManager, JwtService jwtService)
+        public AuthController(UserManager<User> userManager, JwtService jwtService, IUserRepository userRepository)
         {
             _userManager = userManager;
             _jwtService = jwtService;
+            _userRepository = userRepository;
         }
 
 
@@ -144,13 +147,9 @@ namespace EshopWebAPI.Controllers
             {
                 var refreshToken = Request.Cookies["refreshToken"];
 
-                var userName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+                var user = _userRepository.UserByToken(refreshToken);
 
-                var user = await _userManager.FindByNameAsync(userName);
-
-                var userRole = await _userManager.GetRolesAsync(user);
-
-                if (!user.RefreshToken.Equals(refreshToken))
+                if (user == null)
                 {
                     return Unauthorized("Invalid refresh token");
                 }
@@ -158,6 +157,9 @@ namespace EshopWebAPI.Controllers
                 {
                     return Unauthorized("Token has expired");
                 }
+
+
+                var userRole = await _userManager.GetRolesAsync(user);
 
                 var token = _jwtService.Generate(user, userRole.First());
                 var newRefreshToken = GenerateRefreshToken();
@@ -175,6 +177,36 @@ namespace EshopWebAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.None,
+                Secure = true,
+            };
+
+            Response.Cookies.Delete("refreshToken", cookieOptions);
+            
+            return Ok(new
+            {
+                message = "success"
+            });
+        }
+
+        private RefreshToken GenerateRefreshToken(User user)
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = _jwtService.Generate(user),
+                Expires = DateTime.Now.AddDays(7),
+                Created = DateTime.Now
+            };
+
+            return refreshToken;
         }
 
         private RefreshToken GenerateRefreshToken()

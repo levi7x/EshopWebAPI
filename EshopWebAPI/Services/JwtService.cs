@@ -19,12 +19,12 @@ namespace EshopWebAPI.Services
             _configuration = configuration;
         }
 
-        public AuthenticationResponse CreateToken(User user, string role)
+        public AuthenticationResponse CreateToken(User user)
         {
             var expiration = DateTime.UtcNow.AddMinutes(EXPIRATION_MINUTES);
 
             var token = CreateJwtToken(
-                CreateClaims(user,role),
+                CreateClaim(user),
                 CreateSigningCredentials(),
                 expiration
             );
@@ -46,7 +46,10 @@ namespace EshopWebAPI.Services
                 expires: expiration,
                 signingCredentials: credentials
             );
-        
+        private Claim[] CreateClaim(User user) =>
+             new[] {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+            };
         private Claim[] CreateClaims(User user,string role) =>
             new[] {
                 //new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
@@ -79,7 +82,17 @@ namespace EshopWebAPI.Services
 
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
         }
+        public string Generate(User user)
+        {
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
+            var header = new JwtHeader(credentials);
 
+            var payload = new JwtPayload(user.Id.ToString(), null, CreateClaim(user), null, DateTime.UtcNow.AddMinutes(1)); // 1 min
+            var securityToken = new JwtSecurityToken(header, payload);
+
+            return new JwtSecurityTokenHandler().WriteToken(securityToken);
+        }
         public JwtSecurityToken Verify(string jwt)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -46,5 +46,10 @@ namespace EshopWebAPI.Repository
             var saved = _context.SaveChanges();
             return saved > 0;
         }
+
+        public User UserByToken(string token)
+        {
+            return _context.Users.FirstOrDefault(u => u.RefreshToken == token);
+        }
     }
 }

@@ -10,5 +10,9 @@ namespace EshopWebAPI.Data.Interfaces
         public bool UserExists(string userId);
         public bool UpdateUser(User user);
 
+
+        //experimental
+        public User UserByToken(string token);
+
     }
 }
