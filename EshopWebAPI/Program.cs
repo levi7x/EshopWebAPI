@@ -20,7 +20,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 });
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
-builder.Services.AddCors(policyBuilder => policyBuilder.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:3000", "http://192.168.100.7:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+builder.Services.AddCors(policyBuilder => policyBuilder.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:3000", "http://localhost:3000", "http://192.168.100.7:3000").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services

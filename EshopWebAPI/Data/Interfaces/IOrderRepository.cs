@@ -1,4 +1,5 @@
 ﻿using EshopWebAPI.Models;
+using EshopWebAPI.Models.Dto;
 
 namespace EshopWebAPI.Data.Interfaces
 {
@@ -14,9 +15,13 @@ namespace EshopWebAPI.Data.Interfaces
         public bool HasActiveOrder(string userId);
         public bool IncrementPieces(OrderDetails orderDetails);
         public bool IncrementPieces(OrderDetails orderDetails, bool increment);
+        public double GetTotalAmount(string userId);
         public Order GetActiveOrder(string userId);
+        public OrderDetails GetOrderDetail(Product product, Order order);
         public bool AddProductToOrder(Product product, Order order);
         public bool IsProductInOrder(Product product, Order order);
-        public bool RemoveProductFromOrder(Product product, Order order);
+        public bool RemoveProductFromOrder(Product product, Order order, bool atOnce = false);
+        //public CartDTOResponse GetCurrentOrderDetails(string userId);
+        public ICollection<CartDTO> GetCurrentOrderDetails(string userId);
     }
 }

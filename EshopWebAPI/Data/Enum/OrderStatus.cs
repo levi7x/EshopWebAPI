@@ -6,4 +6,6 @@
         Completed,
         Pending
     }
+
+    //closed, finished
 }
