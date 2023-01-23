@@ -26,7 +26,7 @@ Already done:
 authentication, persist-login with jwt tokens, authorization, registration, role based access control, catalog, cart CRUD for users, user account management
 
 
-Yet to do (currently working on): Admin dashboard- managing users, products , orders, categories + adding more admin roles (Superadmin, moderator), implementing search bar and category filter, encrypting credit card data
+Yet to do (currently working on): Admin dashboard- managing users, products , orders, categories + adding more admin roles (Superadmin, moderator), implementing search bar and category filter, encrypting credit card data, making better design for navbar, dropdown menu...
 
 But still comming up with more and more ideas: adding rating and comments to products from users, adding warehouse for managing stock and much more...
 </p>
