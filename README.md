@@ -34,7 +34,7 @@ But still comming up with more and more ideas: adding rating and comments to pro
 <h2> Images from project </h2>
 
 <h4> Current database model </h4>
-<p> Still making changes as i add more features but for now im attaching this to grasp concept</p>
+<p> Still making changes as i add more features but for now im attaching this to grasp the concept</p>
 
 ![model](https://github.com/levi7x/MyImages/blob/main/ghub-imgs/eshop/model.png?raw=true)
 
