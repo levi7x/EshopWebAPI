@@ -1,9 +1,7 @@
-# MusicEshop
+# MusicEshop - currently working on this project!
 
 ## Backend API of the app
 Link to front end source code, please click <a href="https://github.com/levi7x/eshop-react"> HERE </a> to see details.
-
-<h1> Currently working on this project </h1>
 
 <h2> About </h3>
 <p>
@@ -33,4 +31,27 @@ But still comming up with more and more ideas: adding rating and comments to pro
 
 
 
-<h2> Images from project </h3>
+<h2> Images from project </h2>
+
+<h4> Current database model </h4>
+<p> Still making changes as i add more features but for now im attaching this to grasp concept</p>
+
+![model](https://github.com/levi7x/MyImages/blob/main/ghub-imgs/eshop/model.png?raw=true)
+
+<h4> Auth </h4>
+<p> Login is made with JWT Bearer token and Refresh Token stored in HTTP only cookie that stores user information. The login persists even after refreshing page if the refresh token is valid. Register creates a brand new user </p> 
+
+![log](https://github.com/levi7x/MyImages/blob/main/ghub-imgs/eshop/login.png?raw=true)
+
+![reg](https://github.com/levi7x/MyImages/blob/main/ghub-imgs/eshop/reg.png?raw=true)
+
+<h4> Cart </h4>
+<p> User can add products from catalog to cart which are stored in the database. Each user has its own cart. The addition and substraction are dynamic thanks to react, so no form submition is needed</p>
+
+![cart](https://github.com/levi7x/MyImages/blob/main/ghub-imgs/eshop/cart.png?raw=true)
+
+<h4> Account </h4>
+<p> Account displays the user information with many more features </p>
+
+![acc1](https://github.com/levi7x/MyImages/blob/main/ghub-imgs/eshop/acc1.png?raw=true)
+![acc2](https://github.com/levi7x/MyImages/blob/main/ghub-imgs/eshop/acc2.png?raw=true)
