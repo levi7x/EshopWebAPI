@@ -15,7 +15,7 @@ This project was created with ASP .NET CORE WEB API and SQL Database for backend
 
 <h2> Goal </h2>
 <p>
-The goal of this project is to create website that solves business problem. Mainly to improve myself in coding with ASP NET + React.js and applying different concepts i learned over time i ve been writing code without following any tutorial. Ultimate goal is to deploy finished project on Mircrosoft Azure.
+The goal of this project is to create website that solves business problem. Mainly to improve myself in coding with ASP NET + React.js and applying different concepts i learned over time i ve been writing code without following any tutorials. Ultimate goal is to deploy finished project on Mircrosoft Azure.
 </p>
 
 <h2> Use cases </h2>
