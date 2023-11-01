@@ -1,18 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace EshopWebAPI.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        [Key]
-        public string Id { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public bool Subscribed { get; set; } = false;
+        public string? Name { get; set; }
+        public string? Surname { get; set; }
+        public string? RefreshToken { get; set; } = string.Empty;
+        public DateTime? TokenCreated { get; set; } = DateTime.Now;
+        public DateTime? TokenExpires { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public bool? Subscribed { get; set; } = false;
         public Address? Address { get; set; }
         public ICollection<Order> Orders { get; set; }
     }

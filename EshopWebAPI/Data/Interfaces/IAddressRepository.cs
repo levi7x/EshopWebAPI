@@ -4,9 +4,11 @@ namespace EshopWebAPI.Data.Interfaces
 {
     public interface IAddressRepository
     {
-        ICollection<Address> GetAddresses();
-        Address GetAddress(int id);
-        Address GetAddressByUser(string userId);
-        bool AddressExists(int id);
+        public ICollection<Address> GetAddresses();
+        public Address GetAddress(int id);
+        public Address GetAddressByUser(string userId);
+        public bool UpdateAddress(Address address);
+        public bool DeleteAddress(int id);
+        public bool AddressExists(int id);
     }
 }

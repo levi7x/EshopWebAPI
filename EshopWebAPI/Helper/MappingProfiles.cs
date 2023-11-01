@@ -10,7 +10,13 @@ namespace EshopWebAPI.Helper
         {
             CreateMap<Product, ProductDto>();
             CreateMap<Category, CategoryDto>();
-            CreateMap<Address, AddressDto>();
+            CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<Order, OrderDto>().ReverseMap();
+
+            CreateMap<CategoryDto, Category>();
+            CreateMap<ProductDto, Product>();
+
         }
 
     }
